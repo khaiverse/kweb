@@ -2,13 +2,13 @@ import fetch from 'node-fetch';
 import fs from 'fs/promises';
 
 const KHAI_ID = process.env.KHAI_ID;
-const GITHUB_TOKEN = process.env.KHAI_TOKEN;
+const KHAI_TOKEN = process.env.KHAI_TOKEN;
 const CONTENT_DIR = 'content';
 
 async function fetchGistMarkdown() {
   const res = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
   headers: {
-    Authorization: `Bearer ${GITHUB_TOKEN}`,
+    Authorization: `Bearer ${KHAI_TOKEN}`,
     'User-Agent': 'gist-fetch-script'
     }
   });
