@@ -1,4 +1,4 @@
-baseURL = "https://khaiverse.github.io/khaiweb/"
+baseURL = "https://khaiverse.github.io/kweb/"
 languageCode = "en-us"
 title = "Khaiverse"
 contentDir = "content"
