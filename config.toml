@@ -1,0 +1,13 @@
+baseURL = "https://khaiverse.github.io/khaiweb/"
+languageCode = "en-us"
+title = "Khaiverse"
+contentDir = "content"
+paginate = 2 #Luek list sik tempo lek bale
+
+[taxonomies]
+  category = "categories"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
