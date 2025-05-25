@@ -1,0 +1,19 @@
+{{ define "main" }}
+  <h1>{{ .Title }}</h1>
+  <ul>
+    {{ $paginator := .Paginate .Pages }}
+    {{ range $paginator.Pages }}
+      <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+    {{ end }}
+  </ul>
+
+  <div class="pagination">
+    {{ with $paginator.Prev }}
+      <a href="{{ .URL }}">Previous</a>
+    {{ end }}
+
+    {{ with $paginator.Next }}
+      <a href="{{ .URL }}">Next</a>
+    {{ end }}
+  </div>
+{{ end }}

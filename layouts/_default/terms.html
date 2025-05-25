@@ -1,0 +1,10 @@
+{{ define "main" }}
+  <h1>All Categories</h1>
+  <ul>
+    {{ range $term, $pages := .Data.Terms }}
+      <li>
+        <a href="{{ "/categories/" | relLangURL }}{{ $term | urlize }}/">{{ $term }}</a> ({{ len $pages }})
+      </li>
+    {{ end }}
+  </ul>
+{{ end }}
