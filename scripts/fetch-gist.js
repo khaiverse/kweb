@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 import fs from 'fs/promises';
 
 const KHAI_ID = process.env.KHAI_ID;
-const KHAI_TOKEN = process.env.KHAI_TOKEN;
+const GITHUB_TOKEN = process.env.KHAI_TOKEN;
 const CONTENT_DIR = 'content';
 
 async function fetchGistMarkdown() {
