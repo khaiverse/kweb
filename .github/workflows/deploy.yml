@@ -21,8 +21,8 @@ jobs:
       - name: Fetch Content from Gist
         run: node scripts/fetch-gist.js
         env:
-          GIST_ID: ${{ secrets.KHAI_ID }}
-          GITHUB_TOKEN: ${{ secrets.KHAI_TOKEN }}
+          KHAI_ID: ${{ secrets.KHAI_ID }}
+          KHAI_TOKEN: ${{ secrets.KHAI_TOKEN }}
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
