@@ -10,7 +10,7 @@
       <p><strong>Categories:</strong>
       {{ $last := sub (len .) 1 }}
       {{ range $i, $category := . }}
-        <a href="{{ "/khaiweb/categories/" | relLangURL }}{{ $category | urlize }}">{{ $category }}</a>{{ if lt $i $last }}, {{ end }}
+        <a href="{{ "/kweb/categories/" | relLangURL }}{{ $category | urlize }}">{{ $category }}</a>{{ if lt $i $last }}, {{ end }}
       {{ end }}
       </p>
     {{ end }}
