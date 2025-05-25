@@ -1,11 +1,17 @@
 import fetch from 'node-fetch';
 import fs from 'fs/promises';
 
-const GIST_ID = 'cbde8f9b3cfc9aab48b4664fa058e1e9';
+const GIST_ID = process.env.KHAI_ID;
+const GITHUB_TOKEN = process.env.KHAI_TOKEN;
 const CONTENT_DIR = 'content';
 
 async function fetchGistMarkdown() {
-  const res = await fetch(`https://api.github.com/gists/${GIST_ID}`);
+  const res = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+  headers: {
+    Authorization: `Bearer ${GITHUB_TOKEN}`,
+    'User-Agent': 'gist-fetch-script'
+    }
+  });
   const data = await res.json();
   const files = data.files;
 
