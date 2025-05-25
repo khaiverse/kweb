@@ -6,7 +6,7 @@ const KHAI_TOKEN = process.env.KHAI_TOKEN;
 const CONTENT_DIR = 'content';
 
 async function fetchGistMarkdown() {
-  const res = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+  const res = await fetch(`https://api.github.com/gists/${KHAI_ID}`, {
   headers: {
     Authorization: `Bearer ${KHAI_TOKEN}`,
     'User-Agent': 'gist-fetch-script'
