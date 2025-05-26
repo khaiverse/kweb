@@ -1,11 +1,16 @@
 {{ define "main" }}
   <article>
-    {{/* Cari src gambar pertama dari .RawContent (konten mentah markdown HTML) */}}
-    {{ $re := findRE "<img.*?src=[\"']([^\"']+)[\"']" .rawContent }}
-    {{/* Ambil src pertama kalau ada, kalau tidak pakai default */}}
-    {{ $img := cond (gt (len $re) 0) (index $re 0 1) "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiXcTftM-dWwVR9KOkc8PzPng9FbMz-KC083W_hWFV2t2LA10-l0BtsfTj3J3WL2TrClC8aohb-H2Qn_W2DylQ7R11V71k2SGozHBnjSNAKLEUbKzLW4ALsYwMEjcEGSCIyfGLQwERqsQRFlnTv0wm8M0CkGroeYzpKJ_ZPC6_diPbuINzcP075OzTcF7I/s0/meta-image.png" }}
+    {{/* Cari src gambar pertama dari Markdown image syntax di .RawContent */}}
+    {{ $mdImgRE := `!\[.*?\]\(([^)]+)\)` }}
+    {{ $matches := findRE $mdImgRE .RawContent }}
 
-    {{/* Kalau src relatif (bukan http(s)), tambahkan BaseURL */}}
+    {{ $img := "" }}
+    {{ if gt (len $matches) 0 }}
+      {{ $img = index $matches 0 1 }}
+    {{ else }}
+      {{ $img = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiXcTftM-dWwVR9KOkc8PzPng9FbMz-KC083W_hWFV2t2LA10-l0BtsfTj3J3WL2TrClC8aohb-H2Qn_W2DylQ7R11V71k2SGozHBnjSNAKLEUbKzLW4ALsYwMEjcEGSCIyfGLQwERqsQRFlnTv0wm8M0CkGroeYzpKJ_ZPC6_diPbuINzcP075OzTcF7I/s0/meta-image.png" }}
+    {{ end }}
+
     {{ if and (ne $img "") (not (or (hasPrefix $img "http://") (hasPrefix $img "https://"))) }}
       {{ $img = printf "%s%s" .Site.BaseURL $img }}
     {{ end }}
