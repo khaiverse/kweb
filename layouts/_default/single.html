@@ -1,6 +1,6 @@
 {{ define "main" }}
   <article>
-    {{ $imgs := findRE `<img.*?src="([^"]+)"` .Content }}
+    {{ $imgs := findRE `<img.*?src="([^"]+)"` .RawContent }}
     {{ $img := "" }}
     {{ if gt (len $imgs) 0 }}
       {{ $img = index $imgs 0 1 }}
