@@ -1,36 +1,24 @@
 {{ define "main" }}
-<article>
+  <article>
+    {{ $html := .Content | safeHTML }}
+    {{ $re := findRE "<img.*?src=[\"']([^\"']+)[\"']" $html }}
+    {{ $img := cond (gt (len $re) 0) (index $re 0 1) "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiXcTftM-dWwVR9KOkc8PzPng9FbMz-KC083W_hWFV2t2LA10-l0BtsfTj3J3WL2TrClC8aohb-H2Qn_W2DylQ7R11V71k2SGozHBnjSNAKLEUbKzLW4ALsYwMEjcEGSCIyfGLQwERqsQRFlnTv0wm8M0CkGroeYzpKJ_ZPC6_diPbuINzcP075OzTcF7I/s0/meta-image.png" }}
 
-  {{/* Ambil hasil render HTML dari konten */}}
-  {{ $html := .Content }}
-  {{ $matches := findRE `(?i)<img[^>]*?src=["']([^"']+)["']` $html }}
-  {{ $default := "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiXcTftM-dWwVR9KOkc8PzPng9FbMz-KC083W_hWFV2t2LA10-l0BtsfTj3J3WL2TrClC8aohb-H2Qn_W2DylQ7R11V71k2SGozHBnjSNAKLEUbKzLW4ALsYwMEjcEGSCIyfGLQwERqsQRFlnTv0wm8M0CkGroeYzpKJ_ZPC6_diPbuINzcP075OzTcF7I/s0/meta-image.png" }}
-  {{ $img := $default }}
+    <img src="{{ $img }}" alt="Featured image" style="max-width: 100%; height: auto; margin-bottom: 1rem;">
 
-  {{ if gt (len $matches) 0 }}
-    {{ $img = index (index $matches 0) 1 }}
-  {{ end }}
+    <h1>{{ .Title }}</h1>
+    <p><small>By {{ .Params.author }} on {{ .Date.Format "Jan 2, 2006" }}</small></p>
+    <div>
+      {{ .Content }}
+    </div>
 
-  {{ if and (ne $img "") (not (hasPrefix $img "http")) }}
-    {{ $img = printf "%s%s" .Site.BaseURL $img }}
-  {{ end }}
-
-  <img src="{{ $img }}" alt="Featured image" style="max-width: 100%; height: auto; margin-bottom: 1rem;">
-
-  <h1>{{ .Title }}</h1>
-  <p><small>By {{ .Params.author }} on {{ .Date.Format "Jan 2, 2006" }}</small></p>
-  <div>
-    {{ .Content }}
-  </div>
-
-  {{ with .Params.categories }}
-    <p><strong>Categories:</strong>
-    {{ $last := sub (len .) 1 }}
-    {{ range $i, $category := . }}
-      <a href="{{ "/kweb/categories/" | relLangURL }}{{ $category | urlize }}">{{ $category }}</a>{{ if lt $i $last }}, {{ end }}
+    {{ with .Params.categories }}
+      <p><strong>Categories:</strong>
+      {{ $last := sub (len .) 1 }}
+      {{ range $i, $category := . }}
+        <a href="{{ "/kweb/categories/" | relLangURL }}{{ $category | urlize }}">{{ $category }}</a>{{ if lt $i $last }}, {{ end }}
+      {{ end }}
+      </p>
     {{ end }}
-    </p>
-  {{ end }}
-
-</article>
+  </article>
 {{ end }}
