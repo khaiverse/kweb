@@ -11,3 +11,6 @@ paginate = 2 #Luek list sik tempo lek bale
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true
+
+[outputs]
+  home = ["HTML", "RSS", "Sitemap"]
