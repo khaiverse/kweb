@@ -1,36 +1,39 @@
 {{ define "main" }}
-  <article>
-    {{/* Cari src dari tag img pertama dalam konten */}}
-    {{ $matches := findRE `<img[^>]*src=["']([^"']+)["']` .Content }}
-    {{ $defaultImg := "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiXcTftM-dWwVR9KOkc8PzPng9FbMz-KC083W_hWFV2t2LA10-l0BtsfTj3J3WL2TrClC8aohb-H2Qn_W2DylQ7R11V71k2SGozHBnjSNAKLEUbKzLW4ALsYwMEjcEGSCIyfGLQwERqsQRFlnTv0wm8M0CkGroeYzpKJ_ZPC6_diPbuINzcP075OzTcF7I/s0/meta-image.png" }}
-    {{ $img := $defaultImg }}
+<article>
 
-    {{ if gt (len $matches) 0 }}
-      {{ $found := index $matches 0 }}
-      {{ if ge (len $found) 2 }}
-        {{ $img = index $found 1 }}
-      {{ end }}
+  {{/* Ambil HTML konten dan cari tag <img> */}}
+  {{ $html := .Content | safeHTML }}
+  {{ $matches := findRE `<img[^>]*src=["']([^"']+)["']` $html }}
+  {{ $default := "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiXcTftM-dWwVR9KOkc8PzPng9FbMz-KC083W_hWFV2t2LA10-l0BtsfTj3J3WL2TrClC8aohb-H2Qn_W2DylQ7R11V71k2SGozHBnjSNAKLEUbKzLW4ALsYwMEjcEGSCIyfGLQwERqsQRFlnTv0wm8M0CkGroeYzpKJ_ZPC6_diPbuINzcP075OzTcF7I/s0/meta-image.png" }}
+  {{ $img := $default }}
+
+  {{ if gt (len $matches) 0 }}
+    {{ $found := index $matches 0 }}
+    {{ if $found }}
+      {{ $img = $found }}
     {{ end }}
+  {{ end }}
 
-    {{ if and (ne $img "") (not (hasPrefix $img "http")) }}
-      {{ $img = printf "%s%s" .Site.BaseURL $img }}
+  {{ if and (ne $img "") (not (hasPrefix $img "http")) }}
+    {{ $img = printf "%s%s" .Site.BaseURL $img }}
+  {{ end }}
+
+  <img src="{{ $img }}" alt="Featured image" style="max-width: 100%; height: auto; margin-bottom: 1rem;">
+
+  <h1>{{ .Title }}</h1>
+  <p><small>By {{ .Params.author }} on {{ .Date.Format "Jan 2, 2006" }}</small></p>
+  <div>
+    {{ .Content }}
+  </div>
+
+  {{ with .Params.categories }}
+    <p><strong>Categories:</strong>
+    {{ $last := sub (len .) 1 }}
+    {{ range $i, $category := . }}
+      <a href="{{ "/kweb/categories/" | relLangURL }}{{ $category | urlize }}">{{ $category }}</a>{{ if lt $i $last }}, {{ end }}
     {{ end }}
+    </p>
+  {{ end }}
 
-    <img src="{{ $img }}" alt="Featured image" style="max-width: 100%; height: auto; margin-bottom: 1rem;">
-
-    <h1>{{ .Title }}</h1>
-    <p><small>By {{ .Params.author }} on {{ .Date.Format "Jan 2, 2006" }}</small></p>
-    <div>
-      {{ .Content }}
-    </div>
-
-    {{ with .Params.categories }}
-      <p><strong>Categories:</strong>
-      {{ $last := sub (len .) 1 }}
-      {{ range $i, $category := . }}
-        <a href="{{ "/kweb/categories/" | relLangURL }}{{ $category | urlize }}">{{ $category }}</a>{{ if lt $i $last }}, {{ end }}
-      {{ end }}
-      </p>
-    {{ end }}
-  </article>
+</article>
 {{ end }}
