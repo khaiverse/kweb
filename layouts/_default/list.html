@@ -1,11 +1,27 @@
 {{ define "main" }}
   <h1>{{ .Title }}</h1>
   <ul>
-    {{ $paginator := .Paginate .Pages }}
-    {{ range $paginator.Pages }}
-      <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+  {{ $paginator := .Paginate .Pages }}
+  {{ range $paginator.Pages }}
+      <li>
+        {{ $img := "" }}
+        {{ with .Params.featured_image }}
+          {{ $img = . }}
+        {{ else }}
+          {{ $match := findRE "<img.+src=[\"']([^\"']+)[\"'].*?>" .Content }}
+          {{ if gt (len $match) 0 }}
+            {{ $img = index (findRE "src=[\"']([^\"']+)[\"']" (index $match 0)) 0 | replaceRE "src=[\"']([^\"']+)[\"']" "$1" }}
+          {{ else }}
+            {{ $img = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiXcTftM-dWwVR9KOkc8PzPng9FbMz-KC083W_hWFV2t2LA10-l0BtsfTj3J3WL2TrClC8aohb-H2Qn_W2DylQ7R11V71k2SGozHBnjSNAKLEUbKzLW4ALsYwMEjcEGSCIyfGLQwERqsQRFlnTv0wm8M0CkGroeYzpKJ_ZPC6_diPbuINzcP075OzTcF7I/s0/meta-image.png" }}
+          {{ end }}
+        {{ end }}
+  
+        <img src="{{ $img }}" alt="{{ .Title }}" style="max-width:150px; height:auto;" />
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+      </li>
     {{ end }}
   </ul>
+
 
   <div class="pagination">
     {{ with $paginator.Prev }}
